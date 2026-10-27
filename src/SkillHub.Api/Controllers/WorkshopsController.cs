@@ -17,6 +17,13 @@ public sealed class WorkshopsController(WorkshopService workshopService, Enrollm
     public async Task<ActionResult<IReadOnlyList<WorkshopDto>>> GetCatalog(CancellationToken cancellationToken) =>
         Ok(await workshopService.GetCatalogAsync(cancellationToken));
 
+    [HttpGet("manage")]
+    [Authorize(Policy = "Employee")]
+    [ProducesResponseType(typeof(IReadOnlyList<WorkshopDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IReadOnlyList<WorkshopDto>>> GetForManagement(
+        CancellationToken cancellationToken) =>
+        Ok(await workshopService.GetAllForManagementAsync(cancellationToken));
+
     [HttpGet("{id:guid}")]
     [AllowAnonymous]
     [ProducesResponseType(typeof(WorkshopDto), StatusCodes.Status200OK)]

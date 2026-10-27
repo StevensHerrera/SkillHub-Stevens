@@ -52,7 +52,7 @@ import { Workshop } from '../core/models';
     @if (error()) { <div class="alert alert-error" role="alert">{{ error() }}</div> }
     @if (auth.isEmployee()) {
       <div class="alert alert-info" role="note">
-        Sesión de empleado: la creación de talleres, la importación de Excel y los reportes se gestionan desde Swagger/Postman.
+        Sesión de empleado: consulta los inscritos en la pestaña «Inscritos». La creación y edición de talleres, la importación de Excel y los reportes se gestionan desde Swagger/Postman.
       </div>
     }
 

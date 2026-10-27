@@ -27,6 +27,17 @@ export interface Workshop {
   availableSeats: number;
 }
 
+export interface WorkshopEnrollment {
+  id: string;
+  participantId: string;
+  participantName: string;
+  participantEmail: string;
+  status: 'Active' | 'Cancelled';
+  enrolledAt: string;
+  cancelledAt: string | null;
+  cancellationReason: string | null;
+}
+
 export interface Enrollment {
   id: string;
   workshopId: string;

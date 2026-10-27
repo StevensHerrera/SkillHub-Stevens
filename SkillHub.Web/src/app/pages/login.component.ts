@@ -66,7 +66,8 @@ export class LoginComponent {
     this.auth.login(email, password).subscribe({
       next: () => {
         this.loading.set(false);
-        void this.router.navigate([this.auth.isParticipant() ? '/my-enrollments' : '/']);
+        if (this.auth.isEmployee()) void this.router.navigate(['/instructor']);
+        else void this.router.navigate([this.auth.isParticipant() ? '/my-enrollments' : '/']);
       },
       error: failure => {
         this.error.set(errorMessage(failure, 'No pudimos iniciar sesión. Revisa tus datos.'));

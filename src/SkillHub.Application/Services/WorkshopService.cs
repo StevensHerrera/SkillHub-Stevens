@@ -27,6 +27,19 @@ public sealed class WorkshopService(
         return workshop.ToDto();
     }
 
+    public async Task<IReadOnlyList<WorkshopDto>> GetAllForManagementAsync(
+        CancellationToken cancellationToken = default)
+    {
+        if (!currentUser.IsEmployee)
+            throw new ForbiddenException("Only SkillHub employees can consult the workshop management list.");
+
+        var items = await workshops.GetTopAsync(cancellationToken);
+        return items
+            .OrderBy(item => item.Workshop.StartAt)
+            .Select(item => item.ToDto())
+            .ToArray();
+    }
+
     public async Task<WorkshopDto> CreateAsync(CreateWorkshopRequest request, CancellationToken cancellationToken = default)
     {
         EnsureEmployee("Only SkillHub employees can create workshops.");

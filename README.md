@@ -7,8 +7,8 @@ enrollments, cancel them and download an enrollment certificate in PDF. SkillHub
 employees publish workshops, review the participants of any workshop, import mass
 enrollments from Excel and consult the most popular workshops.
 
-The solution is composed of a REST API built with ASP.NET Core and a participant web
-application built with Angular. Both are part of the same repository.
+The solution is composed of a REST API built with ASP.NET Core and an Angular web
+application for participants and instructors. Both are part of the same repository.
 
 ## Technologies
 
@@ -129,9 +129,11 @@ Participant accounts are also seeded with the password `Skillhub2026*`, for exam
 `jorge.perez@correo.com` or `laura.martinez@correo.com`. New users always register as
 participants.
 
-Employee operations (manage workshops, instructors and participants, list workshop
-enrollments, import Excel and consult reports) are demonstrated directly in
-Swagger/Postman, as requested. The Angular application covers the participant flow.
+The Angular application covers the participant flow and also includes an instructor
+panel at `/instructor`, where employees can browse every workshop, see its enrolled
+participants and download their certificates. Workshop creation/editing, instructor
+and participant management, Excel import and reports are demonstrated directly in
+Swagger/Postman.
 
 When an employee creates an instructor or a participant without a password, the
 seeded default password is used (`Instructor2026*` and `Skillhub2026*`
@@ -149,6 +151,7 @@ Base path: `/api/v1`
 | `GET` | `/workshops/{id}` | Public | Workshop detail with available seats |
 | `POST` | `/workshops` | Employee | Create a workshop |
 | `PUT` | `/workshops/{id}` | Employee | Update a workshop |
+| `GET` | `/workshops/manage` | Employee | List every workshop with enrollment counts |
 | `GET` | `/workshops/{id}/enrollments` | Employee | List the enrollments of a workshop |
 | `GET` | `/instructors` | Employee | List instructors (employees) |
 | `GET` | `/instructors/{id}` | Employee | Instructor detail |

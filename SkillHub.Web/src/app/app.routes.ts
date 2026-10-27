@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
-import { guestGuard, participantGuard } from './core/guards';
+import { employeeGuard, guestGuard, participantGuard } from './core/guards';
+import { InstructorComponent } from './pages/instructor.component';
 import { LoginComponent } from './pages/login.component';
 import { MyEnrollmentsComponent } from './pages/my-enrollments.component';
 import { RegisterComponent } from './pages/register.component';
@@ -10,5 +11,6 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [guestGuard] },
   { path: 'register', component: RegisterComponent, canActivate: [guestGuard] },
   { path: 'my-enrollments', component: MyEnrollmentsComponent, canActivate: [participantGuard] },
+  { path: 'instructor', component: InstructorComponent, canActivate: [employeeGuard] },
   { path: '**', redirectTo: '' }
 ];

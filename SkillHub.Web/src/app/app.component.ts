@@ -20,6 +20,9 @@ import { AuthService } from './core/auth.service';
             @if (auth.isParticipant()) {
               <a routerLink="/my-enrollments" routerLinkActive="active">Mis inscripciones</a>
             }
+            @if (auth.isEmployee()) {
+              <a routerLink="/instructor" routerLinkActive="active">Inscritos</a>
+            }
           </nav>
 
           <div class="session">

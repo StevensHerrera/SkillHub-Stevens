@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Enrollment, Workshop } from './models';
+import { Enrollment, Workshop, WorkshopEnrollment } from './models';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -15,6 +15,14 @@ export class ApiService {
 
   workshop(id: string) {
     return this.http.get<Workshop>(`${this.base}/workshops/${id}`);
+  }
+
+  managedWorkshops() {
+    return this.http.get<Workshop[]>(`${this.base}/workshops/manage`);
+  }
+
+  workshopEnrollments(id: string) {
+    return this.http.get<WorkshopEnrollment[]>(`${this.base}/workshops/${id}/enrollments`);
   }
 
   enroll(workshopId: string) {

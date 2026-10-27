@@ -11,11 +11,36 @@ import { Workshop } from '../core/models';
   standalone: true,
   imports: [DatePipe, FormsModule, RouterLink],
   template: `
-    <section class="page-head">
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">SKILLHUB · APRENDE EN PERSONA</span>
+        <h1>Talleres que <em>despiertan</em> tu curiosidad.</h1>
+        <p class="hero-text">
+          Fotografía, cocina, oratoria, diseño, música y marketing. Elige tu taller,
+          reserva tu cupo y lleva tu aprendizaje al siguiente nivel.
+        </p>
+        <div class="hero-stats">
+          <div class="hero-stat"><strong>{{ workshops().length }}</strong><span>talleres disponibles</span></div>
+          <div class="hero-stat"><strong>{{ totalSeats() }}</strong><span>cupos libres</span></div>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <span class="hero-ring"></span>
+        <span class="hero-dot hero-dot-1"></span>
+        <span class="hero-dot hero-dot-2"></span>
+        <div class="hero-card">
+          <span>Incluido</span>
+          <strong>PDF</strong>
+          <small>constancia de inscripción</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="catalog-toolbar">
       <div>
-        <span class="eyebrow">CATÁLOGO PÚBLICO</span>
-        <h1>Talleres disponibles</h1>
-        <p class="muted">Explora los talleres que aún no han comenzado y reserva tu cupo.</p>
+        <span class="eyebrow">CATÁLOGO</span>
+        <h2>Próximos talleres</h2>
+        <p class="muted">{{ filtered().length }} talleres para explorar</p>
       </div>
       <label class="search-box">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 4.5 4.5"></path></svg>
@@ -53,8 +78,12 @@ import { Workshop } from '../core/models';
               <div><dt>Instructor</dt><dd>{{ workshop.instructorName }} · {{ workshop.instructorSpecialty }}</dd></div>
               <div><dt>Inicio</dt><dd>{{ workshop.startAt | date:'EEE d MMM y, HH:mm' }}</dd></div>
               <div><dt>Fin</dt><dd>{{ workshop.endAt | date:'EEE d MMM y, HH:mm' }}</dd></div>
-              <div><dt>Inscritos</dt><dd>{{ workshop.activeEnrollments }} de {{ workshop.capacity }}</dd></div>
             </dl>
+
+            <div class="capacity">
+              <div class="capacity-track"><span [style.width.%]="capacityPercent(workshop)"></span></div>
+              <span class="capacity-label">{{ workshop.activeEnrollments }} de {{ workshop.capacity }} inscritos · {{ workshop.availableSeats }} disponibles</span>
+            </div>
 
             @if (auth.isEmployee()) {
               <span class="hint">Los empleados no se inscriben como participantes.</span>
@@ -105,6 +134,15 @@ export class WorkshopsComponent implements OnInit {
       workshop.instructorName.toLowerCase().includes(query) ||
       workshop.instructorSpecialty.toLowerCase().includes(query)
     );
+  }
+
+  totalSeats(): number {
+    return this.workshops().reduce((total, workshop) => total + workshop.availableSeats, 0);
+  }
+
+  capacityPercent(workshop: Workshop): number {
+    if (workshop.capacity === 0) return 0;
+    return Math.min(100, Math.round((workshop.activeEnrollments / workshop.capacity) * 100));
   }
 
   load(): void {

@@ -31,6 +31,10 @@ import { Enrollment } from '../core/models';
         <div class="enrollment-list">
           @for (enrollment of active(); track enrollment.id) {
             <article class="enrollment-card">
+              <div class="date-badge" aria-hidden="true">
+                <span>{{ enrollment.startAt | date:'MMM' }}</span>
+                <strong>{{ enrollment.startAt | date:'dd' }}</strong>
+              </div>
               <div class="enrollment-main">
                 <div class="enrollment-top">
                   <span class="code">{{ enrollment.workshopCode }}</span>

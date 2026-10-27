@@ -279,7 +279,3 @@ To recreate the database from the script:
 sqlite3 skillhub.db < database/SkillHub.sql
 ```
 
-## Author
-
-- **Full name:** Stevens Andres Herrera Hernandez
-- **Email:** steveherrera98@hotmail.com

@@ -8,6 +8,17 @@ namespace SkillHub.Infrastructure.Pdf;
 
 public sealed class QuestPdfCertificateGenerator : ICertificatePdfGenerator
 {
+    private const string Paper = "#F4F2EA";
+    private const string Surface = "#FFFDF7";
+    private const string Mustard = "#C99A06";
+    private const string MustardDark = "#8A6700";
+    private const string MustardSoft = "#FCF6DF";
+    private const string MustardLine = "#EADFBB";
+    private const string Ink = "#2C2A22";
+    private const string InkSoft = "#514B39";
+    private const string Muted = "#867F6A";
+    private const string Line = "#E5DFCF";
+
     private static readonly TimeSpan ColombiaOffset = TimeSpan.FromHours(-5);
 
     public QuestPdfCertificateGenerator()
@@ -23,93 +34,130 @@ public sealed class QuestPdfCertificateGenerator : ICertificatePdfGenerator
             {
                 page.Size(PageSizes.A4.Landscape());
                 page.Margin(34);
-                page.PageColor(Colors.White);
-                page.DefaultTextStyle(style => style.FontSize(11).FontColor("#1f2937"));
+                page.PageColor(Paper);
+                page.DefaultTextStyle(style => style.FontSize(11).FontColor(Ink));
 
                 page.Content()
-                    .Border(2)
-                    .BorderColor("#0f766e")
-                    .Padding(30)
+                    .Background(Surface)
+                    .Border(1.5f)
+                    .BorderColor("#D9CFB0")
                     .Column(column =>
                     {
-                        column.Item().Row(row =>
+                        column.Item().Height(8).Background(Mustard);
+
+                        column.Item().Padding(30).Column(content =>
                         {
-                            row.RelativeItem().Column(brand =>
+                            content.Item().Row(row =>
                             {
-                                brand.Item().Text("SKILLHUB").FontSize(30).Bold().FontColor("#0f766e");
-                                brand.Item().Text("Centro de formación · Talleres presenciales")
-                                    .FontSize(10).FontColor("#64748b");
+                                row.RelativeItem().Column(brand =>
+                                {
+                                    brand.Item().Text("SKILLHUB")
+                                        .FontSize(32).Bold().FontColor(MustardDark);
+                                    brand.Item().Text("Centro de formación · Talleres presenciales")
+                                        .FontSize(10).FontColor(Muted);
+                                });
+
+                                row.ConstantItem(190).AlignRight()
+                                    .Background(MustardSoft)
+                                    .Border(1)
+                                    .BorderColor(MustardLine)
+                                    .Padding(10)
+                                    .Column(reference =>
+                                    {
+                                        reference.Item().AlignRight().Text("CONSTANCIA")
+                                            .FontSize(8).Bold().FontColor(MustardDark);
+                                        reference.Item().AlignRight().Text(data.WorkshopCode)
+                                            .FontSize(18).Bold().FontColor(Ink);
+                                    });
                             });
-                            row.ConstantItem(170).AlignRight().Column(reference =>
+
+                            content.Item().PaddingTop(18).LineHorizontal(1).LineColor(Line);
+
+                            content.Item().PaddingTop(28).AlignCenter()
+                                .Text("Constancia de inscripción")
+                                .FontSize(34).Bold().FontColor(Ink);
+
+                            content.Item().PaddingTop(10).AlignCenter()
+                                .Text("La presente constancia certifica que")
+                                .FontSize(12).FontColor(Muted);
+
+                            content.Item().PaddingTop(14).AlignCenter()
+                                .Text(data.ParticipantName)
+                                .FontSize(26).Bold().FontColor(Ink);
+
+                            content.Item().PaddingTop(4).AlignCenter()
+                                .Width(90).LineHorizontal(3).LineColor(Mustard);
+
+                            content.Item().PaddingTop(3).AlignCenter()
+                                .Text(data.ParticipantEmail)
+                                .FontSize(11).FontColor(Muted);
+
+                            content.Item().PaddingTop(14).AlignCenter()
+                                .Text("se encuentra inscrito(a) en el taller")
+                                .FontSize(12).FontColor(Muted);
+
+                            content.Item().PaddingTop(8).AlignCenter()
+                                .Text($"{data.WorkshopTitle} ({data.WorkshopCode})")
+                                .FontSize(19).SemiBold().FontColor(Ink);
+
+                            content.Item().PaddingTop(7).AlignCenter()
+                                .Text($"Instructor: {data.InstructorName}")
+                                .FontSize(11).FontColor(InkSoft);
+
+                            content.Item().PaddingTop(3).AlignCenter()
+                                .Text($"Horario: {Format(data.StartAt)} — {Format(data.EndAt)}")
+                                .FontSize(11).FontColor(InkSoft);
+
+                            content.Item().PaddingTop(30).Row(row =>
                             {
-                                reference.Item().Text("CONSTANCIA")
-                                    .FontSize(9).Bold().FontColor("#94a3b8");
-                                reference.Item().Text(data.WorkshopCode)
-                                    .FontSize(18).Bold().FontColor("#0f172a");
+                                row.RelativeItem()
+                                    .Background(MustardSoft)
+                                    .Border(1)
+                                    .BorderColor(MustardLine)
+                                    .Padding(12)
+                                    .Column(item =>
+                                    {
+                                        item.Item().Text("FECHA DE INSCRIPCIÓN")
+                                            .FontSize(8).Bold().FontColor(MustardDark);
+                                        item.Item().Text(FormatDate(data.EnrolledAt))
+                                            .FontSize(11).FontColor(Ink);
+                                    });
+
+                                row.ConstantItem(12);
+
+                                row.RelativeItem()
+                                    .Background(MustardSoft)
+                                    .Border(1)
+                                    .BorderColor(MustardLine)
+                                    .Padding(12)
+                                    .Column(item =>
+                                    {
+                                        item.Item().Text("CÓDIGO DEL TALLER")
+                                            .FontSize(8).Bold().FontColor(MustardDark);
+                                        item.Item().Text(data.WorkshopCode)
+                                            .FontSize(11).FontColor(Ink);
+                                    });
+
+                                row.ConstantItem(12);
+
+                                row.RelativeItem()
+                                    .Background(MustardSoft)
+                                    .Border(1)
+                                    .BorderColor(MustardLine)
+                                    .Padding(12)
+                                    .Column(item =>
+                                    {
+                                        item.Item().Text("FECHA DE GENERACIÓN")
+                                            .FontSize(8).Bold().FontColor(MustardDark);
+                                        item.Item().Text(FormatDate(data.GeneratedAt))
+                                            .FontSize(11).FontColor(Ink);
+                                    });
                             });
+
+                            content.Item().PaddingTop(24).AlignCenter()
+                                .Text("Documento generado automáticamente por SkillHub.")
+                                .FontSize(8).FontColor(Muted);
                         });
-
-                        column.Item().PaddingTop(18).LineHorizontal(1).LineColor("#e2e8f0");
-
-                        column.Item().PaddingTop(30).AlignCenter()
-                            .Text("Constancia de inscripción")
-                            .FontSize(32).Bold().FontColor("#0f172a");
-
-                        column.Item().PaddingTop(10).AlignCenter()
-                            .Text("La presente constancia certifica que")
-                            .FontSize(12).FontColor("#64748b");
-
-                        column.Item().PaddingTop(16).AlignCenter()
-                            .Text(data.ParticipantName)
-                            .FontSize(24).Bold().FontColor("#0f766e");
-
-                        column.Item().PaddingTop(2).AlignCenter()
-                            .Text(data.ParticipantEmail)
-                            .FontSize(11).FontColor("#64748b");
-
-                        column.Item().PaddingTop(14).AlignCenter()
-                            .Text("se encuentra inscrito(a) en el taller")
-                            .FontSize(12).FontColor("#64748b");
-
-                        column.Item().PaddingTop(8).AlignCenter()
-                            .Text($"{data.WorkshopTitle} ({data.WorkshopCode})")
-                            .FontSize(18).SemiBold().FontColor("#0f172a");
-
-                        column.Item().PaddingTop(6).AlignCenter()
-                            .Text($"Instructor: {data.InstructorName}")
-                            .FontSize(11);
-
-                        column.Item().PaddingTop(3).AlignCenter()
-                            .Text($"Horario: {Format(data.StartAt)} — {Format(data.EndAt)}")
-                            .FontSize(11);
-
-                        column.Item().PaddingTop(34).Row(row =>
-                        {
-                            row.RelativeItem().Column(item =>
-                            {
-                                item.Item().Text("FECHA DE INSCRIPCIÓN")
-                                    .FontSize(8).Bold().FontColor("#94a3b8");
-                                item.Item().Text(FormatDate(data.EnrolledAt)).FontSize(11);
-                            });
-
-                            row.RelativeItem().AlignCenter().Column(item =>
-                            {
-                                item.Item().Text("CÓDIGO DEL TALLER")
-                                    .FontSize(8).Bold().FontColor("#94a3b8");
-                                item.Item().Text(data.WorkshopCode).FontSize(11);
-                            });
-
-                            row.RelativeItem().AlignRight().Column(item =>
-                            {
-                                item.Item().Text("FECHA DE GENERACIÓN")
-                                    .FontSize(8).Bold().FontColor("#94a3b8");
-                                item.Item().Text(FormatDate(data.GeneratedAt)).FontSize(11);
-                            });
-                        });
-
-                        column.Item().PaddingTop(26).AlignCenter()
-                            .Text("Documento generado automáticamente por SkillHub.")
-                            .FontSize(8).FontColor("#94a3b8");
                     });
             });
         }).GeneratePdf();

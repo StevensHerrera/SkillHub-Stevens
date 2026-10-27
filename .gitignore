@@ -1,0 +1,14 @@
+.env
+.tools/
+**/bin/
+**/obj/
+**/node_modules/
+SkillHub.Web/dist/
+SkillHub.Web/.angular/
+*.db
+*.db-shm
+*.db-wal
+*.user
+*.suo
+Thumbs.db
+.idea/

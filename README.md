@@ -285,6 +285,8 @@ sqlite3 skillhub.db < database/SkillHub.sql
 ## Author
 
 - **Name:** Stevens Andres Herrera Hernandez
+- **Clan:** C# & ASP.NET
+- **ID:** 1143167294
 - **Email:** steveherrera98@hotmail.com
 
 ## Repository
